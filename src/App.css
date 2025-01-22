@@ -6,8 +6,10 @@
 }
 
 body {
-  background-color: #f5f5f7;
-  color: #333;
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  padding: 20px;
+  background-color: #f4f4f9;
 }
 
 h2, h3 {
@@ -27,12 +29,13 @@ h2, h3 {
 }
 
 .container {
-  max-width: 500px;
-  background-color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 10px;
 }
 
 /* Button Styles */
@@ -48,6 +51,26 @@ button {
 
 button:hover {
   background-color: #2980b9;
+}
+
+.circle-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 50%; /* Circular shape */
+  padding: 10px;
+  width: 40px; /* Ensure width and height are equal */
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 1rem; /* Adjust font size */
+}
+
+.circle-button:hover {
+  background-color: #0056b3;
 }
 
 /* Input Styles */
@@ -70,9 +93,19 @@ ul {
 
 li {
   display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  align-items: center;
+  justify-content: space-between; /* Distribute space evenly */
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 5px;
+}
+
+.item-label {
+  flex: 1; /* Takes available space, aligning buttons */
+}
+
+.count {
+  margin: 0 10px; /* Space between count and buttons */
 }
 
 li:last-child {
@@ -93,4 +126,35 @@ li:last-child {
   color: red;
   text-align: center;
   margin-bottom: 10px;
+}
+
+.message {
+  position: absolute;
+  background-color: green;
+  padding: 10px;
+  border-radius: 5px;
+  color: rgb(255, 255, 255);
+  font-weight: bold;
+  animation: fadeIn 0.2s ease;
+  display: inline-block; /* Ensures alignment */
+  transform-origin: top; /* Aligns shaking effect */
+}
+
+.red {
+  background-color: red;
+}
+
+.shake {
+  animation: textShake 0.1s ease infinite;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes textShake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-2px); }
+  40%, 80% { transform: translateX(2px); }
 }

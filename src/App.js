@@ -32,18 +32,18 @@ function App() {
       {user ? (
         <div className="container">
           <Profile userId={user.uid} />
-          <button onClick={handleLogout}>Logout</button>
+          <button onClick={handleLogout}>Kijelentkezés</button>
           <Leaderboard />
         </div>
       ) : isSigningUp ? (
         <div className="container">
           <SignUp onSignUp={setUser} />
-          <button onClick={() => setIsSigningUp(false)}>Back to Login</button>
+          <button onClick={() => setIsSigningUp(false)}>Vissza a bejelentkezéshez</button>
         </div>
       ) : (
         <div className="container">
           <Login onLogin={setUser} />
-          <button onClick={() => setIsSigningUp(true)}>Sign Up</button>
+          <button onClick={() => setIsSigningUp(true)}>Regisztráció</button>
         </div>
       )}
     </div>
