@@ -18,20 +18,28 @@ exports.sendPingNotification = functions.firestore
     .document("pings/{pingId}")
     .onCreate(async (snap, context) => {
       const pingData = snap.data();
-
-      const message = {
-        notification: {
-          title: "New Ping!",
-          body: `${pingData.senderName} has pinged you with 🍻!`,
-        },
-        token: pingData.recipientFcmToken, // The recipient's FCM token
-      };
-
       try {
+        const recipientRef = admin.firestore().collection('stats').doc(pingData.recipientId);
+        const recipientSnap = await recipientRef.get();
+        const recipientToken = recipientSnap.exists ? recipientSnap.data().fcmToken : null;
+
+        if (!recipientToken) {
+          console.log('No FCM token for recipient');
+          return;
+        }
+
+        const message = {
+          notification: {
+            title: 'New Ping!',
+            body: `${pingData.senderName} has pinged you with 🍻!`,
+          },
+          token: recipientToken,
+        };
+
         await admin.messaging().send(message);
-        console.log("Ping notification sent successfully");
+        console.log('Ping notification sent successfully');
       } catch (error) {
-        console.error("Error sending ping notification:", error);
+        console.error('Error sending ping notification:', error);
       }
     });
 
