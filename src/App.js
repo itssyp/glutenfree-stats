@@ -1,38 +1,47 @@
 import React, { useState, useEffect } from 'react';
-import { onAuthStateChanged, signOut } from 'firebase/auth';
-import { auth } from './components/firebaseConfig'; // Adjust import path based on your project structure
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from './components/firebaseConfig'; 
 import Login from './components/Login';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
 import Leaderboard from './components/Leaderboard';
-import './App.css'; // Optional: Your app's styling
+import MenuToggle from './components/MenuToggle';
+import PlayerMenu from './components/PlayerMenu';
+import './App.css'; 
 
 function App() {
   const [user, setUser] = useState(null);
   const [isSigningUp, setIsSigningUp] = useState(false);
+  const [nightMode, setNightMode] = useState(() => {
+    const savedMode = localStorage.getItem('nightMode');
+    return savedMode === 'true' || false;
+  });
+
+  useEffect(() => {
+    localStorage.setItem('nightMode', nightMode);
+  }, [nightMode]);
+
+  const toggleNightMode = () => {
+    setNightMode(!nightMode);
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser ? currentUser : null);
     });
 
+
     return () => unsubscribe();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-    } catch (error) {
-      console.error("Error during sign out", error);
-    }
-  };
 
   return (
-    <div className="App">
+    <div className='App'>
       {user ? (
         <div className="container">
+          <MenuToggle userId={user.uid} />
+          <PlayerMenu currentUserId={user.uid}/>
           <Profile userId={user.uid} />
-          <button onClick={handleLogout}>Kijelentkezés</button>
           <Leaderboard />
         </div>
       ) : isSigningUp ? (

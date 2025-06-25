@@ -41,7 +41,7 @@ const Profile = ({ userId }) => {
     resetMessageTimeout = setTimeout(() => setShowMessage(false), 1000); // Hide message if no clicks within 500ms
 
     if (clickCount === 2) setMessage('Dupla!');
-    else if (clickCount === 3) setMessage('Tipla!');
+    else if (clickCount === 3) setMessage('Tripla!');
     else if (clickCount === 4) setMessage('Megállíthatatlan!');
     else if (clickCount === 5) setMessage('Beteg állat!');
     else if (clickCount >= 6) {
@@ -71,15 +71,17 @@ const Profile = ({ userId }) => {
         ...prevData,
         itemCounters: updateditems,
       }));
-      handleClick(itemId);
+      handleClick(itemId, increment > 0);
     } catch (error) {
       console.error("Error updating counter:", error);
     }
   };
 
-  const handleClick = (itemId) => {
-    setClickCount((prevCount) => prevCount + 1);
-    setLastClickedItemId(itemId);
+  const handleClick = (itemId, isIncrement) => {
+    if (isIncrement) {
+      setClickCount((prevCount) => prevCount + 1);
+      setLastClickedItemId(itemId);
+    }
   };
 
   const itemAlias = (itemId) => {
@@ -101,7 +103,6 @@ const Profile = ({ userId }) => {
   return (
     <div>
       <h2>{userData.name}</h2>
-      <h3>statok:</h3>
       <ul>
         {sortedItems.map(([itemId, count]) => (
           <li key={itemId}>
@@ -111,7 +112,7 @@ const Profile = ({ userId }) => {
             <button className="circle-button" onClick={() => updateCounter(itemId, 1)} style={{ margin: '0 5px', position: 'relative' }}>
               +
               {showMessage && lastClickedItemId === itemId && (
-                <div className={`message ${clickCount >= 8 ? 'red' : ''} ${shake ? 'shake' : ''}`} style={{ position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)' }}>
+                <div className={`message ${clickCount >= 6 ? 'red' : ''} ${shake ? 'shake' : ''}`} style={{ position: 'absolute', top: '-40px', left: '50%', transform: 'translateX(-50%)' }}>
                   {message}
                 </div>
               )}
