@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from './components/firebaseConfig'; 
+import { auth, messaging, db } from './components/firebaseConfig';
+import { getToken } from 'firebase/messaging';
+import { doc, setDoc } from 'firebase/firestore';
 import Login from './components/Login';
 import Profile from './components/Profile';
 import SignUp from './components/SignUp';
@@ -33,6 +35,26 @@ function App() {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const registerToken = async () => {
+      try {
+        await Notification.requestPermission();
+        const currentToken = await getToken(messaging, {
+          vapidKey: 'REPLACE_WITH_YOUR_PUBLIC_VAPID_KEY'
+        });
+        if (currentToken) {
+          await setDoc(doc(db, 'stats', user.uid), { fcmToken: currentToken }, { merge: true });
+        }
+      } catch (err) {
+        console.error('Failed to get FCM token', err);
+      }
+    };
+
+    registerToken();
+  }, [user]);
 
 
   return (
